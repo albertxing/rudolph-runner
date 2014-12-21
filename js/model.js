@@ -13,8 +13,8 @@ function Model (x, y, w, h, img) {
 	this.visible = true;
 }
 
-Model.prototype.draw = function (ctx) {
-	ctx.drawImage(this.img, this.x, this.y, this.w, this.h);
+Model.prototype.draw = function () {
+	Game.ctx.drawImage(this.img, this.x, this.y, this.w, this.h);
 }
 
 Model.prototype.update = function (dt) {
