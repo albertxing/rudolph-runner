@@ -1,40 +1,55 @@
 function Game () {
 	this.rudolph = new Rudolph();
+
+	// Obstacles: snowmen, snowballs
 	this.obstacles = [];
+
+	// Particles: snow, dirt, terrain
 	this.particles = [];
+	// Close particles are ones that are closer
+	// than Rudolph
 	this.closeParticles = [];
 
+	// Waiting for input?
 	this.waiting = true;
+	// Stage: 0 - not started, 1 - playing, 2 - over
 	this.stage = 0;
 
 	this.score = 0;
-	this.maxScore = false;
+	this.highScore = false;
 
+	// Time last updated
 	this.time;
 
+	// Generate initial terrain and dirt
 	this.generateTerrain();
 }
 
+// Singleton pattern ... ?
 Game.getInstance = function () {
 	if (!Game._instance) Game._instance = new Game();
 	return Game._instance;
 }
 
+// Container, canvas, and context
 Game.container = document.getElementById("container");
 Game.canvas = document.getElementById("canvas");
 Game.ctx = canvas.getContext("2d");
 
+// Misc images:
+// Keyboard tips
 Game.help = document.getElementById("help-img");
+// Game over overlay
 Game.overImg = document.getElementById("over");
 
-Game.startImg = cI("k1.png");
-Game.jumpImg = cI("k2.png");
-
+// Image sprite containing parts needed to
+// draw score ("MAX", "SCORE", and digits)
 Game.numImg = cI("n.png");
 
 Game.prototype.draw = function () {
 	Game.ctx.clearRect(0, 0, Game.canvas.width, Game.canvas.height);
 
+	// Draw the ground
 	Game.ctx.fillStyle = "#ffffff";
 	Game.ctx.fillRect(0, Game.canvas.height - 18, Game.canvas.width, 18);
 
@@ -48,19 +63,23 @@ Game.prototype.draw = function () {
 
 Game.prototype.drawScore = function () {
 	var w = Game.canvas.width;
+
+	// Init. x to offset space needed
 	var x = w - 315;
 
-	if (this.maxScore) {
+	if (this.highScore) {
 		Game.ctx.drawImage(Game.numImg, 0, 30, 96, 30, x, 12, 48, 15);
-		this.drawNumber(Math.floor(this.maxScore), x + 120);
+		this.drawNumber(Math.floor(this.highScore), x + 120);
 	}
 
+	// Move on to draw score
 	x += 168;
 
 	Game.ctx.drawImage(Game.numImg, 102, 30, 138, 30, x, 12, 69, 15);
 	this.drawNumber(Math.floor(this.score), x + 141);
 }
 
+// Draws a number onto canvas using image sprite
 Game.prototype.drawNumber = function (n, x) {
 	var digits = n.toString().split('');
 	for (var i = digits.length - 1; i >= 0; i--) {
@@ -71,6 +90,7 @@ Game.prototype.drawNumber = function (n, x) {
 }
 
 Game.prototype.update = function (now) {
+	// Find time since last update
 	var dt = now - (this.time || now);
 	this.time = now;
 
@@ -87,6 +107,7 @@ Game.prototype.update = function (now) {
 	this.generate();
 	this.draw();
 
+	// Request next animation frame
 	this.req();
 }
 
@@ -102,14 +123,15 @@ Game.prototype.checkCollision = function () {
 }
 
 Game.prototype.start = function () {
+	// If in game over state...
 	if (this.stage == 2) {
 		this.obstacles = [];
 		this.particles = [];
 
 		this.time = false;
 
-		if (!this.maxScore || this.score > this.maxScore)
-			this.maxScore = this.score;
+		if (!this.highScore || this.score > this.highScore)
+			this.highScore = this.score;
 		this.score = 0;
 
 		this.rudolph.reset();
@@ -118,10 +140,12 @@ Game.prototype.start = function () {
 		Game.overImg.style.display = "none";
 	}
 
+	// Set state to playing
 	this.stage = 1;
 	this.waiting = false;
 	this.rudolph.run();
 
+	// Show jump hint... for two seconds
 	Game.help.src = "images/k2.png";
 	setTimeout(function () {
 		Game.help.src = "";
@@ -137,6 +161,10 @@ Game.prototype.gameOver = function () {
 	Game.overImg.style.display = "initial";
 
 	Game.help.src = "images/k3.png";
+
+	// We have to ignore input for some delay
+	// so we don't restart the game when the
+	// player jumps too late
 	setTimeout(function () {
 		this.waiting = true;
 	}.bind(this), 400);
@@ -160,6 +188,7 @@ Game.prototype.clean = function () {
 }
 
 Game.prototype.generate = function () {
+	// Randomly generate next obstacle
 	var last = this.obstacles[this.obstacles.length - 1];
 	if (!last || last.x + last.w < Game.canvas.width) {
 		var start = Game.canvas.width + 2 * Rudolph.S;
@@ -198,6 +227,7 @@ Game.prototype.generate = function () {
 		}
 	}
 
+	// Generate particles
 	if (toss(0.3)) this.particles.push(new Snow());
 	if (toss(0.3)) this.closeParticles.push(new Snow());
 	if (toss(0.2)) this.particles.push(new Terrain());
@@ -205,6 +235,7 @@ Game.prototype.generate = function () {
 }
 
 Game.prototype.generateTerrain = function () {
+	// Generate terrain at start of game
 	for (var x = 0; x < Game.canvas.width; x += 3) {
 		x += 3;
 		if (toss(0.1)) {

@@ -9,7 +9,9 @@ function Model (x, y, w, h, img) {
 	this.timer = 0;
 	this.speed = -0.5;
 
+	// Vertical speed
 	this.dy = 0;
+	// Vertical displacement from y
 	this.oy = 0;
 
 	this.moving = false;
