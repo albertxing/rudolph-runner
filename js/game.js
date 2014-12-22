@@ -266,6 +266,15 @@ Game.prototype.onkeydown = function (e) {
 	}
 }
 
+Game.prototype.ontouchstart = function (e) {
+	if (this.stage != 1 && this.waiting) {
+		this.start();
+		return;
+	}
+
+	this.rudolph.jump();
+}
+
 Game.prototype.onkeyup = function (e) {
 	this.keydown = false;
 }
@@ -276,7 +285,8 @@ window.onload = function () {
 	var game = Game.getInstance();
 
 	window.addEventListener("keydown", game.onkeydown.bind(game));
-	window.addEventListener("keyup", game.onkeyup.bind(game))
+	window.addEventListener("keyup", game.onkeyup.bind(game));
+	window.addEventListener("touchstart", game.ontouchstart.bind(game));
 }
 
 window.onresize = function () {
