@@ -253,8 +253,12 @@ Game.prototype.generateTerrain = function () {
 
 Game.prototype.onkeydown = function (e) {
 	if (this.stage != 1 && this.waiting) {
-		if (e.keyCode == 32)
+		switch (e.keyCode) {
+			case 32:
+			case 38:
 			this.start();
+			break;
+		}
 		return;
 	}
 
