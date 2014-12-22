@@ -4,6 +4,7 @@ function cI (src) {
 	return img;
 }
 
-function toss () {
-	return Math.random() < 0.5;
+function toss (p) {
+	if (!p) p = 0.5;
+	return Math.random() < p;
 }

@@ -3,9 +3,6 @@ function Rudolph () {
 
 	this.runImg = 0;
 	this.alt = 180;
-
-	this.dy = 0;
-	this.oy = 0;
 }
 
 Rudolph.standingImg = cI("r.png");
@@ -13,7 +10,7 @@ Rudolph.jumpImg = cI("r2.png");
 Rudolph.runImgs = [cI("r0.png"), cI("r1.png")];
 
 Rudolph.S = 72;
-Rudolph.X = 72;
+Rudolph.X = 144;
 Rudolph.Y = Game.canvas.height - Rudolph.S - 12;
 Rudolph.G = 0.06;
 
@@ -28,6 +25,13 @@ Rudolph.prototype.run = function () {
 Rudolph.prototype.stop = function () {
 	this.moving = false;
 	this.img = Rudolph.standingImg;
+}
+
+Rudolph.prototype.reset = function () {
+	this.jumping = false;
+	this.y = Rudolph.Y;
+	this.dy = 0;
+	this.oy = 0;
 }
 
 Rudolph.prototype.jump = function () {

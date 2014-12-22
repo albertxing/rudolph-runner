@@ -15,17 +15,59 @@
 			height: 40%;
 			width: 100%;
 		}
+
+		#snow .help {
+			padding-top: 24px;
+			text-align: center;
+		}
+
+		#snow .help img {
+			display: none;
+		}
+
+		#snow .help img[src *= "."] {
+			display: initial;
+		}
+
+		#over {
+			position: fixed;
+			top: 30%;
+			width: 100%;
+			text-align: center;
+			display: none;
+		}
+
+		.footer {
+			margin: 1em;
+			position: fixed;
+			bottom: 0;
+			left: 0;
+			font: 10pt sans-serif;
+			color: #c3c3c3;
+		}
+		.footer a {
+			color: #c3c3c3;
+		}
 		</style>
 	</head>
 	<body>
 		<div id="container">
 			<canvas width="800" height="300" id="canvas"></canvas>
 		</div>
-		<div id="snow"></div>
+		<div id="snow">
+			<div class="help">
+				<img id="help-img" src="images/k1.png" height="36">
+			</div>
+		</div>
+		<div id="over">
+			<img id="over-img" src="images/o.png" height="15">
+		</div>
+		<div class="footer">Made by <a href="https://albertxing.github.io">Albert Xing</a>. Source on <a href="https://github.com/albertxing/rudolph-runner">GitHub</a></div>
 		<script src="js/util.js"></script>
 		<script src="js/game.js"></script>
 		<script src="js/model.js"></script>
 		<script src="js/rudolph.js"></script>
+		<script src="js/particle.js"></script>
 		<script src="js/obstacle.js"></script>
 	</body>
 </html>

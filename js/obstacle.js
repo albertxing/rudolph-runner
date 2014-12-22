@@ -3,7 +3,7 @@ function Obstacle (x, imgs) {}
 Obstacle.prototype = new Model(0, 0, 0, 0, null);
 
 Obstacle.prototype.fixY = function () {
-	this.y = Rudolph.Y + Rudolph.S - this.h - 6;
+	this.y = Game.canvas.height - this.h - 18;
 }
 
 Obstacle.prototype.collidesWith = function (r) {
@@ -23,6 +23,7 @@ function Snowman (x) {
 	this.img = meta.img;
 
 	this.fixY();
+	this.run();
 }
 
 Snowman.imgs = [{
@@ -56,6 +57,7 @@ function Snowball (x) {
 	this.img = meta.img;
 
 	this.fixY();
+	this.run();
 }
 
 Snowball.imgs = [{

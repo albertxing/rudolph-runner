@@ -9,6 +9,9 @@ function Model (x, y, w, h, img) {
 	this.timer = 0;
 	this.speed = -0.5;
 
+	this.dy = 0;
+	this.oy = 0;
+
 	this.moving = false;
 	this.visible = true;
 }
@@ -18,8 +21,13 @@ Model.prototype.draw = function () {
 }
 
 Model.prototype.update = function (dt) {
+	if (!this.moving) return;
+
 	this.x += this.speed * dt;
-	if (this.x + this.w < 0) this.visible = false;
+	this.y += this.dy * dt;
+
+	if (this.x + this.w < 0 || this.y > Game.canvas.height)
+		this.visible = false;
 }
 
 Model.prototype.run = function () {
@@ -29,3 +37,5 @@ Model.prototype.run = function () {
 Model.prototype.stop = function () {
 	this.moving = false;
 }
+
+Model.prototype.fixY = function () {};
